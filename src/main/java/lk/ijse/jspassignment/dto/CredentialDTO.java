@@ -12,4 +12,5 @@ public class CredentialDTO {
     private String nic;
     private String gmail;
     private String password;
+    private String jobRole;
 }

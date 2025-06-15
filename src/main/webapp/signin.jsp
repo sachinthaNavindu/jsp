@@ -118,7 +118,7 @@
                 <div class="signup-link">
                     <p class="text-muted">
                         Don't have an account?
-                        <a href="signup.jsp" class="text-decoration-none"
+                        <a href="${pageContext.request.contextPath}/signup" class="text-decoration-none"
                         >Sign up</a
                         >
                     </p>

@@ -1,4 +1,4 @@
 package lk.ijse.jspassignment.dao;
 
-public class SigninDAO {
+public class EmployeeDAO {
 }

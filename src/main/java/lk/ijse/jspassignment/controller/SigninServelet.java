@@ -1,46 +1,51 @@
 package lk.ijse.jspassignment.controller;
 
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.ijse.jspassignment.dao.CredentialDAO;
+import lk.ijse.jspassignment.dto.CredentialDTO;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 
 @WebServlet("/signin")
 public class SigninServelet extends HttpServlet {
+
+    private CredentialDAO credentialDAO;
+
+    public void init() throws ServletException {
+        BasicDataSource ds = (BasicDataSource) getServletContext().getAttribute("ds");
+        credentialDAO = new CredentialDAO(ds);
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-       String email = request.getParameter("emailInput");
-       String password = request.getParameter("passwordInput");
+       CredentialDTO credentialDTO = new CredentialDTO("null","null",request.getParameter("emailInput"),request.getParameter("passwordInput"),"null");
 
-       ServletContext context = getServletContext();
-       BasicDataSource ds = (BasicDataSource) context.getAttribute("ds");
+       boolean checkCredentials = credentialDAO.checkPassword(credentialDTO);
 
-        try{
-            Connection conn = ds.getConnection();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM credentials WHERE email = ? AND password = ?");
-                    ps.setString(1,email);
-                    ps.setString(2,password);
+        if (checkCredentials) {
+            CredentialDTO loggedInUser = credentialDAO.findByEmail(request.getParameter("emailInput"));
+            if (loggedInUser != null) {
 
-                    ResultSet rs = ps.executeQuery();
-                    if (rs.next()) {
-                        System.out.println("success");
-                        response.sendRedirect(request.getContextPath() + "/signin.jsp");
-                    }else{
-                        response.sendRedirect(request.getContextPath() + "/signin.jsp?error=invalid");
-                    }
+                System.out.println("if eka wada");
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/signin.jsp?error=server");
+                request.getSession().setAttribute("NIC",loggedInUser.getNic());
+                request.getSession().setAttribute("name",loggedInUser.getUsername());
+//                request.setAttribute("jobrole",loggedInUser.getJobRole());
+
+                response.sendRedirect(request.getContextPath() + "/dashboardEmployee.jsp");
+            }else {
+                response.sendRedirect(request.getContextPath() + "/signin.jsp?error=server");
+            }
+        }else {
+            response.sendRedirect(request.getContextPath() + "/signin.jsp?error=invalid");
         }
+
     }
 }

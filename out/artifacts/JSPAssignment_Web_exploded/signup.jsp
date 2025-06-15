@@ -52,10 +52,18 @@
             <p class="text-muted">Please fill below details</p>
         </div>
 
-        <form id="signupForm" novalidate method="post">
+        <% String generalError = (String) request.getAttribute("generalError"); %>
+        <% if (generalError != null) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= generalError %>
+        </div>
+        <% } %>
+
+
+        <form id="signupForm" action="signup" novalidate method="post">
 
             <div class="form-floating mb-3">
-                <select class="form-select" id="nicSelect" name="nic" required>
+                <select class="form-select" id="nicSelect" name="nicSelect" required>
                     <option selected disabled value="">Choose NIC</option>
                     <%
                         List<String> nicList = (List<String>)request.getAttribute("nicList");
@@ -77,7 +85,7 @@
 
 
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username" required autocomplete="username">
+                <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="Username" required autocomplete="username">
                 <label for="usernameInput">Username</label>
                 <div class="invalid-feedback">
                     Please enter your username.
@@ -86,7 +94,7 @@
 
 
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="gmailInput" name="gmail" placeholder="example@gmail.com" required autocomplete="email">
+                <input type="email" class="form-control" id="gmailInput" name="gmailInput" placeholder="example@gmail.com" required autocomplete="email">
                 <label for="gmailInput">Gmail</label>
                 <div class="invalid-feedback">
                     Please enter a valid Gmail address.
@@ -95,7 +103,7 @@
 
 
             <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" required autocomplete="new-password">
+                <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Password" required autocomplete="new-password">
                 <label for="passwordInput">Password</label>
                 <div class="invalid-feedback">
                     Please enter your password.
@@ -104,7 +112,7 @@
 
 
             <div class="form-floating mb-3">
-                <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPassword" placeholder="Confirm Password" required autocomplete="new-password">
+                <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPasswordInput" placeholder="Confirm Password" required autocomplete="new-password">
                 <label for="confirmPasswordInput">Confirm Password</label>
                 <div class="invalid-feedback">
                     Passwords do not match.
