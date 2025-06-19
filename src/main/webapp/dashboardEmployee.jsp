@@ -336,13 +336,17 @@
                         <td>
                             <div class="action-buttons">
                                 <a href="${pageContext.request.contextPath}/complainupdate?complainid=<%=complaint.getComplainId()%>">
-                                    <button id="btn-edit" class="btn btn-edit btn-sm" <%= complaint.getStatus().equals("pending") ? "" : "disabled" %>>
+                                    <button id="btn-edit" class="btn btn-edit btn-sm"
+                                            <%= complaint.getStatus().equals("pending") ? "" : "disabled" %>
+                                            style="<%= !complaint.getStatus().equals("pending") ? "opacity: 0.5; cursor: not-allowed;" : "" %>">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 </a>
 
-                                <a href="${pageContext.request.contextPath}/dashboard?type=delete&userNic=<%=complaint.getNic()%>&type=delete&complainid=<%= complaint.getComplainId()%>">
-                                    <button class="btn btn-danger btn-sm" <%= complaint.getStatus().equals("pending") ? "" : "disabled" %>>
+                                <a href="${pageContext.request.contextPath}/dashboard?type=delete&userNic=<%=complaint.getNic()%>&complainid=<%=complaint.getComplainId()%>">
+                                    <button class="btn btn-danger btn-sm"
+                                            <%= complaint.getStatus().equals("pending") ? "" : "disabled" %>
+                                            style="<%= !complaint.getStatus().equals("pending") ? "opacity: 0.5; cursor: not-allowed;" : "" %>">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </a>

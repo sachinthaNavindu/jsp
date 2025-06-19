@@ -328,10 +328,10 @@
 
                 <div class="admin-actions">
                     <div class="action-buttons">
-                        <button type="submit" class="btn btn-primary">Mark as InProgress</button>
+                        <button type="submit" name="action" value="inprogress" class="btn btn-primary">Mark as InProgress</button>
                         <button type="submit" name="action" value="solved" class="btn btn-success">Mark as Solved</button>
                     </div>
-                    <button type="button" name="delete" class="btn btn-danger">Delete Complaint</button>
+
                 </div>
             </form>
 

@@ -74,4 +74,16 @@ public class ComplainSolutionDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean delete(String id) {
+        try{
+            String sql = "DELETE FROM complaint_solution WHERE compl_id=?";
+            PreparedStatement ps = ds.getConnection().prepareStatement(sql);
+            ps.setString(1, id);
+            int rs = ps.executeUpdate();
+            return rs > 0;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

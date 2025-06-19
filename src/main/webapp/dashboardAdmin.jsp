@@ -404,6 +404,12 @@
                                     </button>
                                 </div>
                             </a>
+                            <br>
+                            <a href="${pageContext.request.contextPath}/delete?complainid=<%= complaint.getComplainId()%>">
+                                <button class="btn btn-danger btn-sm" <%= complaint.getStatus().equals("pending") || complaint.getStatus().equals("In Progress") ? "" : "disabled" %>>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </a>
                         </td>
                     </tr>
                     <% }
@@ -429,7 +435,6 @@
                         <th>Title</th>
                         <th>Date</th>
                         <th>Status</th>
-                        <th>Admin Comment</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -449,6 +454,12 @@
                                         <i class="fas fa-edit"></i> View
                                     </button>
                                 </div>
+                            </a>
+                            <br>
+                            <a href="${pageContext.request.contextPath}/delete?complainid=<%= complaint.getComplainId()%>">
+                                <button class="btn btn-danger btn-sm" <%= complaint.getStatus().equals("pending") || complaint.getStatus().equals("In Progress") ? "" : "disabled" %>>
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </a>
                         </td>
                     </tr>
