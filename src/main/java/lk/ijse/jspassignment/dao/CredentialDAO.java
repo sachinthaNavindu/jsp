@@ -92,4 +92,19 @@ public class CredentialDAO {
             return null;
         }
     }
+
+    public String getNic(String emailInput) {
+        try {
+            String sql = "select nic from credentials where gmail =?";
+            PreparedStatement ps = ds.getConnection().prepareStatement(sql);
+            ps.setString(1, emailInput);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return rs.getString("nic");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }

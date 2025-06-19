@@ -1,28 +1,37 @@
+<%@ page import="lk.ijse.jspassignment.dto.ComplainDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="lk.ijse.jspassignment.dto.ComplainDTO" %><%--
+<%@ page import="lk.ijse.jspassignment.dto.CustomeDTO" %><%--
   Created by IntelliJ IDEA.
   User: User
-  Date: 15/06/2025
-  Time: 2:30 am
+  Date: 19/06/2025
+  Time: 2:03 am
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String NIC = (String) session.getAttribute("NIC");
     String userName = (String) session.getAttribute("name");
-    List<ComplainDTO> complaints = (List<ComplainDTO>) session.getAttribute("complaints");
+
+    Integer pendingCount = (Integer) session.getAttribute("pendingCompCount");
+    Integer inProgressCount = (Integer) session.getAttribute("inProgressCount");
+    Integer resolvedCount = (Integer) session.getAttribute("resolvedCount");
+
+    List<ComplainDTO> complaintsPending = (List<ComplainDTO>) session.getAttribute("complaintsPending");
+    List<ComplainDTO> complaintsInProgress = (List<ComplainDTO>) session.getAttribute("complaintsInProgress");
+    List<CustomeDTO> complaintsResolved = (List<CustomeDTO>) session.getAttribute("complaintsResolved");
 
     if(NIC == null){
         response.sendRedirect("signin.jsp");
         return;
     }
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complaint Management Dashboard</title>
+    <title>Admin Complaint Management Dashboard</title>
     <style>
         * {
             box-sizing: border-box;
@@ -167,6 +176,15 @@
             background-color: #d35400;
         }
 
+        .btn-success {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -263,9 +281,47 @@
             gap: 10px;
         }
 
-        .container a{
+        .container a {
             text-decoration: none;
             color: white;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            flex: 1;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            margin-top: 0;
+            color: #7f8c8d;
+        }
+
+        .stat-card .count {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-card.pending .count {
+            color: #f39c12;
+        }
+
+        .stat-card.in-progress .count {
+            color: #3498db;
+        }
+
+        .stat-card.resolved .count {
+            color: #2ecc71;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -274,18 +330,16 @@
 <div class="container">
     <div class="option-bar">
         <div class="logo">
-            <h2>Complaint System</h2>
+            <h2>Admin Dashboard</h2>
         </div>
         <div class="menu-item active">
             <i class="fas fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </div>
-        <a href="${pageContext.request.contextPath}/complain">
-            <div class="menu-item">
-                <i class="fas fa-plus-circle"></i>
-                <span>New Complaint</span>
-            </div>
-        </a>
+        <div class="menu-item">
+            <i class="fas fa-users"></i>
+            <span>User Management</span>
+        </div>
         <div class="menu-item">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
@@ -293,31 +347,40 @@
     </div>
     <div class="loading-bar">
         <div class="top-bar">
-            <h3>Complaint Management</h3>
+            <h3>Admin Complaint Management</h3>
             <div class="user-info">
-                <img src="https://ui-avatars.com/api/?name=<%= userName != null ? userName.replace(" ", "+") : "User" %>&background=3498db&color=fff" alt="User">
+                <img src="https://ui-avatars.com/api/?name=Admin&background=3498db&color=fff" alt="Admin">
                 <span><%= userName %></span>
             </div>
         </div>
         <div class="content">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Submit New Complaint</h4>
-                    <a href="${pageContext.request.contextPath}/complain"><button class="btn btn-primary" id="newComplaintBtn">
-                        <i class="fas fa-plus"></i> New Complaint
-                    </button></a>
+            <div class="stats-container">
+                <div class="stat-card pending">
+                    <h3>Pending</h3>
+                    <div class="count"><%= pendingCount %></div>
+                    <p>Complaints awaiting action</p>
                 </div>
-                <p>Click the button above to submit a new complaint.</p>
+                <div class="stat-card in-progress">
+                    <h3>In Progress</h3>
+                    <div class="count"><%= inProgressCount %></div>
+                    <p>Complaints being processed</p>
+                </div>
+                <div class="stat-card resolved">
+                    <h3>Resolved</h3>
+                    <div class="count"><%= resolvedCount %></div>
+                    <p>Complaints resolved</p>
+                </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <h4>My Recent Complaints</h4>
+                    <h4>Pending Complaints</h4>
                 </div>
                 <table>
                     <thead>
                     <tr>
                         <th>ID</th>
+                        <th>User</th>
                         <th>Title</th>
                         <th>Date</th>
                         <th>Status</th>
@@ -325,39 +388,121 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% if (complaints != null) {
-                        for (ComplainDTO complaint : complaints) {
-                    %>
+                    <% if(complaintsPending != null && !complaintsPending.isEmpty()) {
+                        for(ComplainDTO complaint : complaintsPending) { %>
                     <tr>
-                        <td><%= complaint.getComplainId()%></td>
+                        <td><%= complaint.getComplainId() %></td>
+                        <td><%= complaint.getNic() %></td>
                         <td><%= complaint.getContext() %></td>
                         <td><%= complaint.getDate() %></td>
                         <td><%= complaint.getStatus() %></td>
                         <td>
-                            <div class="action-buttons">
-                                <a href="${pageContext.request.contextPath}/complainupdate?complainid=<%=complaint.getComplainId()%>">
-                                    <button id="btn-edit" class="btn btn-edit btn-sm" <%= complaint.getStatus().equals("pending") ? "" : "disabled" %>>
-                                        <i class="fas fa-edit"></i>
+                            <a href="${pageContext.request.contextPath}/admincomplaintviewer?complaintid=<%= complaint.getComplainId()%>">
+                                <div class="action-view">
+                                    <button class="btn btn-edit btn-sm">
+                                        <i class="fas fa-edit"></i> View
                                     </button>
-                                </a>
-
-                                <a href="${pageContext.request.contextPath}/dashboard?type=delete&userNic=<%=complaint.getNic()%>&type=delete&complainid=<%= complaint.getComplainId()%>">
-                                    <button class="btn btn-danger btn-sm" <%= complaint.getStatus().equals("pending") ? "" : "disabled" %>>
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
                         </td>
                     </tr>
-                    <%    }
+                    <% }
                     } else { %>
-                    <tr><td colspan="5">No complaints to display.</td></tr>
+                    <tr>
+                        <td colspan="6">No complaints to display.</td>
+                    </tr>
                     <% } %>
                     </tbody>
                 </table>
             </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4>In Progress Complaints</h4>
+
+                </div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Admin Comment</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if(complaintsInProgress != null && !complaintsInProgress.isEmpty()) {
+                        for(ComplainDTO complaint : complaintsInProgress) { %>
+                    <tr>
+                        <td><%= complaint.getComplainId() %></td>
+                        <td><%= complaint.getNic() %></td>
+                        <td><%= complaint.getContext() %></td>
+                        <td><%= complaint.getDate() %></td>
+                        <td><%= complaint.getStatus() %></td>
+                        <td>
+                            <a href="${pageContext.request.contextPath}/admincomplaintviewer?complaintid=<%= complaint.getComplainId()%>">
+                                <div class="action-view">
+                                    <button class="btn btn-success btn-sm">
+                                        <i class="fas fa-edit"></i> View
+                                    </button>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                    <% }
+                    } else { %>
+                    <tr>
+                        <td colspan="6">No complaints to display.</td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4>Resolved Complaints</h4>
+
+                </div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Admin Comment</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% if(complaintsResolved != null && !complaintsResolved.isEmpty()) {
+                        for(CustomeDTO complaint : complaintsResolved) { %>
+                    <tr>
+                        <td><%= complaint.getComplaintId() %></td>
+                        <td><%= complaint.getNic() %></td>
+                        <td><%= complaint.getDescription() %></td>
+                        <td><%= complaint.getDate() %></td>
+                        <td><%= complaint.getStatus() %></td>
+                        <td><%=complaint.getSolution()%></td>
+                    </tr>
+                    <% }
+                    } else { %>
+                    <tr>
+                        <td colspan="6">No complaints to display.</td>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 </div>
+
+
 </body>
 </html>

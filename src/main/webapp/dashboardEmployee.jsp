@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.List" %>
+<%@ page import="lk.ijse.jspassignment.dto.ComplainDTO" %><%--
   Created by IntelliJ IDEA.
   User: User
   Date: 15/06/2025
@@ -9,7 +10,7 @@
 <%
     String NIC = (String) session.getAttribute("NIC");
     String userName = (String) session.getAttribute("name");
-//    String role = (String) session.getAttribute("jobrole");
+    List<ComplainDTO> complaints = (List<ComplainDTO>) session.getAttribute("complaints");
 
     if(NIC == null){
         response.sendRedirect("signin.jsp");
@@ -286,10 +287,6 @@
             </div>
         </a>
         <div class="menu-item">
-            <i class="fas fa-list"></i>
-            <span>My Complaints</span>
-        </div>
-        <div class="menu-item">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
         </div>
@@ -306,9 +303,9 @@
             <div class="card">
                 <div class="card-header">
                     <h4>Submit New Complaint</h4>
-                    <button class="btn btn-primary" id="newComplaintBtn">
+                    <a href="${pageContext.request.contextPath}/complain"><button class="btn btn-primary" id="newComplaintBtn">
                         <i class="fas fa-plus"></i> New Complaint
-                    </button>
+                    </button></a>
                 </div>
                 <p>Click the button above to submit a new complaint.</p>
             </div>
@@ -328,54 +325,34 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <% if (complaints != null) {
+                        for (ComplainDTO complaint : complaints) {
+                    %>
                     <tr>
-                        <td>#1234</td>
-                        <td>Broken office chair</td>
-                        <td>2023-06-15</td>
-                        <td class="status-pending">Pending</td>
+                        <td><%= complaint.getComplainId()%></td>
+                        <td><%= complaint.getContext() %></td>
+                        <td><%= complaint.getDate() %></td>
+                        <td><%= complaint.getStatus() %></td>
                         <td>
                             <div class="action-buttons">
-                                <button class="btn btn-edit btn-sm"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                <a href="${pageContext.request.contextPath}/complainupdate?complainid=<%=complaint.getComplainId()%>">
+                                    <button id="btn-edit" class="btn btn-edit btn-sm" <%= complaint.getStatus().equals("pending") ? "" : "disabled" %>>
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </a>
+
+                                <a href="${pageContext.request.contextPath}/dashboard?type=delete&userNic=<%=complaint.getNic()%>&type=delete&complainid=<%= complaint.getComplainId()%>">
+                                    <button class="btn btn-danger btn-sm" <%= complaint.getStatus().equals("pending") ? "" : "disabled" %>>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </a>
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>#1233</td>
-                        <td>Air conditioning not working</td>
-                        <td>2023-06-14</td>
-                        <td class="status-in-progress">In Progress</td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-edit btn-sm" disabled><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-danger btn-sm" disabled><i class="fas fa-trash"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#1232</td>
-                        <td>Printer out of paper</td>
-                        <td>2023-06-10</td>
-                        <td class="status-resolved">Resolved</td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-edit btn-sm" disabled><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-danger btn-sm" disabled><i class="fas fa-trash"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>#1231</td>
-                        <td>Slow internet connection</td>
-                        <td>2023-06-08</td>
-                        <td class="status-resolved">Resolved</td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-edit btn-sm" disabled><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-danger btn-sm" disabled><i class="fas fa-trash"></i></button>
-                            </div>
-                        </td>
-                    </tr>
+                    <%    }
+                    } else { %>
+                    <tr><td colspan="5">No complaints to display.</td></tr>
+                    <% } %>
                     </tbody>
                 </table>
             </div>

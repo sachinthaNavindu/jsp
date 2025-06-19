@@ -10,6 +10,7 @@ import lk.ijse.jspassignment.dto.ComplainDTO;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/complain")
 public class ComplainPageServlet extends HttpServlet {
@@ -42,7 +43,9 @@ public class ComplainPageServlet extends HttpServlet {
             boolean isSave = complainDAO.   saveComplaint(complainDTO);
 
             if (isSave){
-                response.sendRedirect(request.getContextPath() + "/complain?success=true");
+                List<ComplainDTO> complaints = complainDAO.getLogedInUserComplaints(nic);
+                request.setAttribute("complaints", complaints);
+                response.sendRedirect(request.getContextPath() + "/dashboard?type=reload&userNic=" + nic);
             }else {
                 response.sendRedirect(request.getContextPath() + "/complain?error=true");
             }

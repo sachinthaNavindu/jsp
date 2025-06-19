@@ -240,11 +240,11 @@
                 <label class="required">Complaint Category</label>
                 <select class="form-control" id="complaintCategory" name="complaintCategory" required>
                     <option value="">-- Select a category --</option>
-                    <option value="facility">Facility Issue</option>
-                    <option value="it">IT Problem</option>
-                    <option value="hr">HR Matter</option>
-                    <option value="security">Security Concern</option>
-                    <option value="other">Other</option>
+                    <option value="facility Issue">Facility Issue</option>
+                    <option value="It Problem">IT Problem</option>
+                    <option value="Hr Matter">HR Matter</option>
+                    <option value="Security Concern">Security Concern</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
 
