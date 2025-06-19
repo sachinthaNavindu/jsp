@@ -250,7 +250,7 @@
     <div class="complaint-container">
         <div class="user-bar">
             <div>
-                <a href="admin-dashboard.jsp" style="color: white; text-decoration: none;">← Back to Dashboard</a>
+                <a href="${pageContext.request.contextPath}/reload" style="color: white; text-decoration: none;">← Back to Dashboard</a>
             </div>
         </div>
 

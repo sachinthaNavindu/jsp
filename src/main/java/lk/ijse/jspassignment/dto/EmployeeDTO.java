@@ -10,6 +10,7 @@ import lombok.*;
 public class EmployeeDTO {
     private String nic;
     private String name;
+    private String address;
     private String contact;
     private String jobRole;
 }

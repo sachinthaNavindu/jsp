@@ -332,14 +332,20 @@
         <div class="logo">
             <h2>Admin Dashboard</h2>
         </div>
-        <div class="menu-item active">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-        </div>
+
+        <a href="dashboardAdmin.jsp">
+            <div class="menu-item active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </div>
+        </a>
+
+        <a href="<%= request.getContextPath() + "/employee?username=" + userName %>">
         <div class="menu-item">
-            <i class="fas fa-users"></i>
-            <span>User Management</span>
-        </div>
+                <i class="fas fa-users"></i>
+                <span>User Management</span>
+            </div>
+        </a>
         <div class="menu-item">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>

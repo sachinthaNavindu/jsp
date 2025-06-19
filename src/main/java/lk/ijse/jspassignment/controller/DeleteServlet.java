@@ -38,21 +38,6 @@ public class DeleteServlet extends HttpServlet {
             complainDAO.deleteComplain(id);
         }
 
-        List<ComplainDTO> complaintsPending = complainDAO.getAllComplaints("pending");
-        List<ComplainDTO> complaintsInProgress = complainDAO.getAllComplaints("In Progress");
-        List<CustomeDTO> complaintsResolved = queryDAO.getAll();
-
-        int pendingCompCount = complainDAO.getPendingComplainCount("pending");
-        int inProgressCount = complainDAO.getPendingComplainCount("In Progress");
-        int resolvedCount = complainDAO.getPendingComplainCount("resolved");
-
-        request.getSession().setAttribute("pendingCompCount", pendingCompCount);
-        request.getSession().setAttribute("inProgressCount", inProgressCount);
-        request.getSession().setAttribute("resolvedCount", resolvedCount);
-        request.getSession().setAttribute("complaintsPending", complaintsPending);
-        request.getSession().setAttribute("complaintsInProgress", complaintsInProgress);
-        request.getSession().setAttribute("complaintsResolved", complaintsResolved);
-
-        request.getRequestDispatcher("/dashboardAdmin.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/reload");
     }
 }
