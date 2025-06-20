@@ -107,4 +107,16 @@ public class CredentialDAO {
         }
         return null;
     }
+
+    public boolean delete(String deleteNic) {
+        try{
+            String sql = "delete from credentials where NIC =?";
+            PreparedStatement ps = ds.getConnection().prepareStatement(sql);
+            ps.setString(1, deleteNic);
+            int rs = ps.executeUpdate();
+            return rs > 0;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.ijse.jspassignment.dao.CredentialDAO;
 import lk.ijse.jspassignment.dao.EmployeeDAO;
 import lk.ijse.jspassignment.dto.EmployeeDTO;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -16,10 +17,12 @@ import java.util.List;
 public class EmployeeManagementServlet extends HttpServlet {
 
     private EmployeeDAO employeeDAO;
+    private CredentialDAO credentialDAO;
 
     public void init() throws ServletException {
         BasicDataSource ds = (BasicDataSource) getServletContext().getAttribute("ds");
         employeeDAO = new EmployeeDAO(ds);
+        credentialDAO = new CredentialDAO(ds);
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<EmployeeDTO> employeeList = employeeDAO.getAllEmployee();
@@ -51,11 +54,15 @@ public class EmployeeManagementServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/employee");
             }
         } else if (type.equals("delete")) {
-            boolean isDeleted = employeeDAO.delete(request.getParameter("deleteNic"));
 
-            if (isDeleted) {
-                response.sendRedirect(request.getContextPath() + "/employee");
-            }
+//            boolean credentialDelete = credentialDAO.delete(request.getParameter("deleteNic"));
+
+//            if (credentialDelete) {
+                boolean isDeleted = employeeDAO.delete(request.getParameter("deleteNic"));
+                if (isDeleted) {
+                    response.sendRedirect(request.getContextPath() + "/employee");
+                }
+//            }
         }
     }
 }

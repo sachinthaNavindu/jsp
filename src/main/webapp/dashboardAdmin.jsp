@@ -13,6 +13,8 @@
     response.setHeader("Pragma", "no-cache");
     response.setDateHeader("Expires", 0);
 
+
+
     String NIC = (String) session.getAttribute("NIC");
     String userName = (String) session.getAttribute("name");
 

@@ -8,8 +8,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lk.ijse.jspassignment.dao.ComplainDAO;
 import lk.ijse.jspassignment.dao.ComplainSolutionDAO;
 import lk.ijse.jspassignment.dao.QueryDAO;
-import lk.ijse.jspassignment.dto.ComplainDTO;
-import lk.ijse.jspassignment.dto.CustomeDTO;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.io.IOException;
@@ -32,11 +30,8 @@ public class DeleteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("complainid");
 
-        boolean isDeleted = complainSolutionDAO.delete(id);
-
-        if (isDeleted){
-            complainDAO.deleteComplain(id);
-        }
+        complainSolutionDAO.delete(id);
+        complainDAO.deleteComplain(id);
 
         response.sendRedirect(request.getContextPath() + "/reload");
     }
