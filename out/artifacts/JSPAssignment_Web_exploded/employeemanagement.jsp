@@ -8,6 +8,10 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+
     List<EmployeeDTO> employeeList = (List<EmployeeDTO>) request.getAttribute("employeeList");
     String userName = (String) session.getAttribute("loggedInUser");
 %>
@@ -17,237 +21,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Management</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            background-color: #f5f5f5;
-        }
-
-        .container {
-            height: 100vh;
-            width: 100%;
-            display: flex;
-        }
-
-        .option-bar {
-            height: 100%;
-            width: 250px;
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px 0;
-        }
-
-        .logo {
-            text-align: center;
-            padding: 10px 0 30px;
-            border-bottom: 1px solid #34495e;
-            margin-bottom: 20px;
-        }
-
-        .logo h2 {
-            margin: 0;
-        }
-
-        .menu-item {
-            padding: 15px 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-        }
-
-        .menu-item:hover {
-            background-color: #34495e;
-        }
-
-        .menu-item.active {
-            background-color: #3498db;
-        }
-
-        .menu-item i {
-            margin-right: 10px;
-            font-size: 18px;
-        }
-
-        .loading-bar {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .top-bar {
-            height: 70px;
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 30px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .content {
-            flex: 1;
-            padding: 30px;
-            overflow-y: auto;
-        }
-
-        .card {
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-        }
-
-        .btn-success {
-            background-color: #2ecc71;
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #27ae60;
-        }
-
-        .btn-danger {
-            background-color: #e74c3c;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
-
-        .btn-disabled {
-            background-color: #95a5a6;
-            color: white;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-
-        th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-
-        tr:hover {
-            background-color: #f8f9fa;
-            cursor: pointer;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        select.form-control {
-            height: 38px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-col {
-            flex: 1;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .container a {
-            text-decoration: none;
-            color: white;
-        }
-
-        input[readonly] {
-            background-color: #f5f5f5;
-            cursor: not-allowed;
-        }
-        .is-invalid {
-            border-color: #e74c3c !important;
-        }
-
-        .invalid-feedback {
-            width: 100%;
-            margin-top: 0.25rem;
-            font-size: 0.875em;
-            color: #e74c3c;
-        }
-    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/employeemanagement.css">
 </head>
 <body>
 <div class="container">
@@ -265,10 +40,12 @@
             <i class="fas fa-users"></i>
             <span>User Management</span>
         </div>
-        <div class="menu-item">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-        </div>
+        <a href="<%= request.getContextPath() %>/logout">
+            <div class="menu-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </div>
+        </a>
     </div>
     <div class="loading-bar">
         <div class="top-bar">
@@ -382,112 +159,6 @@
     </div>
 </div>
 
-<script>
-    function loadEmployeeData(nic, name, address, contact, role) {
-        document.getElementById('nic').value = nic;
-        document.getElementById('name').value = name;
-        document.getElementById('address').value = address;
-        document.getElementById('contact').value = contact;
-        document.getElementById('role').value = role;
-
-        document.getElementById('nic').readOnly = true;
-
-        const updateBtn = document.getElementById('updateBtn');
-        updateBtn.disabled = false;
-        updateBtn.classList.remove('btn-disabled');
-    }
-
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('table') && !e.target.closest('#employeeForm')) {
-            resetForm();
-        }
-    });
-
-    function resetForm() {
-        document.getElementById('employeeForm').reset();
-        document.getElementById('nic').readOnly = false;
-
-        const updateBtn = document.getElementById('updateBtn');
-        updateBtn.disabled = true;
-        updateBtn.classList.add('btn-disabled');
-    }
-
-    function validateNIC(nic) {
-        const oldNicPattern = /^[0-9]{9}[vVxX]$/;
-        const newNicPattern = /^[0-9]{12}$/;
-
-        return oldNicPattern.test(nic) || newNicPattern.test(nic);
-    }
-
-    function validateContactNumber(contact) {
-        const pattern = /^0[0-9]{9}$/;
-        return pattern.test(contact);
-    }
-
-    document.getElementById('nic').addEventListener('blur', function() {
-        const nic = this.value.trim();
-        const errorElement = document.getElementById('nicError') || createErrorElement(this, 'nicError');
-
-        if (nic === '') {
-            errorElement.textContent = 'NIC is required';
-            this.classList.add('is-invalid');
-            return;
-        }
-
-        if (!validateNIC(nic)) {
-            errorElement.textContent = 'Please enter a valid NIC (10 digits ending with V/X or 12 digits)';
-            this.classList.add('is-invalid');
-        } else {
-            errorElement.textContent = '';
-            this.classList.remove('is-invalid');
-        }
-    });
-
-    document.getElementById('contact').addEventListener('blur', function() {
-        const contact = this.value.trim();
-        const errorElement = document.getElementById('contactError') || createErrorElement(this, 'contactError');
-
-        if (contact === '') {
-            errorElement.textContent = 'Contact number is required';
-            this.classList.add('is-invalid');
-            return;
-        }
-
-        if (!validateContactNumber(contact)) {
-            errorElement.textContent = 'Please enter a valid 10-digit phone number starting with 0';
-            this.classList.add('is-invalid');
-        } else {
-            errorElement.textContent = '';
-            this.classList.remove('is-invalid');
-        }
-    });
-
-    function createErrorElement(inputElement, id) {
-        const errorElement = document.createElement('div');
-        errorElement.id = id;
-        errorElement.className = 'invalid-feedback';
-        inputElement.parentNode.appendChild(errorElement);
-        return errorElement;
-    }
-
-    document.getElementById('employeeForm').addEventListener('submit', function(e) {
-        const nic = document.getElementById('nic').value.trim();
-        const contact = document.getElementById('contact').value.trim();
-
-        if (!validateNIC(nic)) {
-            e.preventDefault();
-            alert('Please enter a valid NIC number');
-            document.getElementById('nic').focus();
-            return;
-        }
-
-        if (!validateContactNumber(contact)) {
-            e.preventDefault();
-            alert('Please enter a valid contact number');
-            document.getElementById('contact').focus();
-            return;
-        }
-    });
-</script>
+<script src="js/employeemanagement.js"></script>
 </body>
 </html>

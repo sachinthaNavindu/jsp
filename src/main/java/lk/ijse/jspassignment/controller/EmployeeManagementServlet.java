@@ -23,6 +23,7 @@ public class EmployeeManagementServlet extends HttpServlet {
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<EmployeeDTO> employeeList = employeeDAO.getAllEmployee();
+
         String loggedInUser = request.getParameter("username");
         System.out.println(loggedInUser);
 

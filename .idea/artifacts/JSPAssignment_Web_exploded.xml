@@ -5,7 +5,7 @@
       <element id="javaee-facet-resources" facet="JSPAssignment/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="JSPAssignment" />
+          <element id="module-output" name="EmployeeManagementSystem" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.19.0" />

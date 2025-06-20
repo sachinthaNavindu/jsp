@@ -15,39 +15,7 @@
                 integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
                 crossorigin="anonymous"
         />
-        <style>
-            body {
-                background-color: #f8f9fa;
-            }
-            .signin-container {
-                max-width: 400px;
-                margin: 100px auto;
-                padding: 30px;
-                background-color: white;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            }
-            .signin-logo {
-                text-align: center;
-                margin-bottom: 30px;
-            }
-            .form-floating label {
-                color: #6c757d;
-            }
-            .btn-signin {
-                width: 100%;
-                padding: 10px;
-                font-weight: 600;
-            }
-            .forgot-password {
-                text-align: right;
-                margin-top: 10px;
-            }
-            .signup-link {
-                text-align: center;
-                margin-top: 20px;
-            }
-        </style>
+        <link rel="stylesheet" href="css/signin.css">
     </head>
         <body>
         <div class="container">

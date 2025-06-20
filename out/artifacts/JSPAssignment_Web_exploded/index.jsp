@@ -2,12 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>JSP - Hello World</title>
+  <title>Complain Management System</title>
+  <meta http-equiv="refresh" content="0; URL=${pageContext.request.contextPath}/signin.jsp" />
 </head>
 <body>
-<h1><%String hello = "Hello World!"; %></h1>
-
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
 </body>
 </html>
